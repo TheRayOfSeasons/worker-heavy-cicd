@@ -1,6 +1,4 @@
-from app import router
-
 from .tasks import GenerateFlavorsReportTask
 
-
-router.register(GenerateFlavorsReportTask)
+# Register tasks here:
+GenerateFlavorsReportTask.as_task()

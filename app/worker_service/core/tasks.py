@@ -31,20 +31,22 @@ class Task(TaskInterface):
 
     task_name = ''
 
-    def get_task_name(self, *args, **kwargs):
+    @classmethod
+    def get_task_name(cls, *args, **kwargs):
         """
         A virtual method that returns the task name.
         """
-        return self.task_name or self.__class__.__name__
+        return cls.task_name or cls.__class__.__name__
 
-    def as_celery_task(
-            self, run_as_test=False, safe_test=True,
+    @classmethod
+    def as_task(
+            cls, run_as_test=False, safe_test=True,
             *args, **kwargs):
         """
         Returns the instance as a celery task.
         """
-        instance = self.__class__(*args, **kwargs)
-        task_name = self.get_task_name(*args, **kwargs)
+        instance = cls(*args, **kwargs)
+        task_name = cls.get_task_name(*args, **kwargs)
         @shared_task(name=task_name)
         def task_wrapper(*task_args, **task_kwargs):
             if run_as_test:
@@ -53,7 +55,7 @@ class Task(TaskInterface):
                     return True
                 logger.info(f'Running {task_name} for testing purposes.')
             try:
-                result = self.run(
+                result = instance.run(
                     run_as_test=run_as_test,
                     *task_args,
                     **task_kwargs
@@ -68,6 +70,6 @@ class Task(TaskInterface):
         return task_wrapper
 
     def __call__(self, *args, **kwargs):
-        celery_task = self.as_celery_task(*args, **kwargs)
+        celery_task = self.as_task(*args, **kwargs)
         return celery_task.delay(*args, **kwargs)
 

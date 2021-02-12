@@ -34,6 +34,7 @@ class ExcelReport:
 
     def __init__(self, *args, **kwargs):
         self.workbook = xlwt.Workbook()
+        self.sheet = self.workbook.add_sheet('Sheet1', cell_overwrite_ok=True)
         self.build_headers(*args, **kwargs)
         self.build_content(*args, **kwargs)
 
@@ -104,7 +105,7 @@ class ExcelReport:
         workbook = self.workbook
         headers = self.get_headers(*args, **kwargs)
         for col, header in enumerate(headers):
-            workbook.write(0, col, header['text'])
+            self.sheet.write(0, col, header['text'])
         return workbook
 
     def build_content(self, *args, **kwargs):
@@ -116,7 +117,7 @@ class ExcelReport:
         for row, data in enumerate(row_data):
             row += self.content_row_offset
             for col, datum in enumerate(row_data):
-                workbook.write(row, col, datum)
+                self.sheet.write(row, col, datum)
         return workbook
 
     def output(self):

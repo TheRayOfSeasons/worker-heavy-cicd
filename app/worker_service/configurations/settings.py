@@ -1,4 +1,5 @@
 INSTALLED_APPS = [
-    'core',
     'ice_creams'
 ]
+
+BROKER_URL = 'redis://localhost:6379/0'
