@@ -1,5 +1,7 @@
 import json
 
+import requests
+
 from django.conf import settings
 
 from core.aws_utils.sqs import send_to_sqs
@@ -9,11 +11,10 @@ from core.services import Service
 class WorkerService(Service):
     """
     A one way interaction with the worker
-    service by publishing a message in a
-    FIFO SQS queue.
+    service through an HTTP request.
     """
 
-    SQS_ARN = settings.SQS_WORKER_QUEUE
+    PROXY_URL = settings.WORKER_SERVICE_PROXY_URL
 
     def send_payload(self, task: str, *args, **kwargs):
         """
@@ -41,4 +42,9 @@ class WorkerService(Service):
             'args': args,
             'kwargs': kwargs
         })
-        return send_to_sqs(self.SQS_ARN, payload)
+        response = requests.request(
+            'POST',
+            self.PROXY_URL,
+            data=payload
+        )
+        return response

@@ -128,7 +128,7 @@ AUTH_PASSWORD_VALIDATORS = [
 AUTH_USER_MODEL = 'users.User'
 
 # AWS Services
-SQS_WORKER_QUEUE = os.getenv('SQS_WORKER_QUEUE', '')
+WORKER_SERVICE_PROXY_URL = os.getenv('WORKER_SERVICE_PROXY_URL', '')
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
