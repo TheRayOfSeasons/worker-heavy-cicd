@@ -7,8 +7,8 @@ import { IceCreamsComponent } from './pages/ice-creams/ice-creams.component';
 
 const routes: Routes = [
   {path: '', component: HomeComponent},
-  {path: 'ice-creams/', component: IceCreamsComponent },
-  {path: 'flavors/', component: FlavorsComponent}
+  {path: 'ice-creams', component: IceCreamsComponent },
+  {path: 'flavors', component: FlavorsComponent}
 ];
 
 @NgModule({
